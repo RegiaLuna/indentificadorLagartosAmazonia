@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificador de Lagartos - Amazônia Brasileira</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        header {
+            background: #2a6b3c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .progress-container {
+            background: #e0e0e0;
+            height: 10px;
+            width: 100%;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #4caf50;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+        }
+        
+        .question-number {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-btn {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background: #e9f5e9;
+            border-color: #4caf50;
+        }
+        
+        .option-btn.selected {
+            background: #d4edda;
+            border-color: #4caf50;
+        }
+        
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .feature-img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+        
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            color: #2a6b3c;
+            margin-bottom: 20px;
+        }
+        
+        .species-name {
+            font-size: 2.2rem;
+            color: #1b4332;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f1f8e9;
+            border-radius: 8px;
+        }
+        
+        .species-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .species-info {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .reset-btn {
+            padding: 12px 25px;
+            background: #2a6b3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .reset-btn:hover {
+            background: #1b4332;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .nav-btn:hover {
+            background: #e9ecef;
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .option-btn {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+            
+            .species-name {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Identificador de Lagartos</h1>
+            <p class="subtitle">Amazônia Brasileira - Baseado na obra de T.C.S. Avila-Pires</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="content">
+            <div id="question-section">
+                <div class="question-container">
+                    <div class="question-number" id="question-number">Pergunta 1 de 10</div>
+                    <div class="question-text" id="question-text">Como são as escamas no topo da cabeça do lagarto?</div>
+                </div>
+                
+                <div class="image-container">
+                    <div>Imagem de referência:</div>
+                    <img src="https://placehold.co/600x400/2a6b3c/white?text=Escamas+na+cabeça" alt="Exemplo visual" class="feature-img" id="question-image">
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Options will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="navigation">
+                    <button class="nav-btn" id="prev-btn" disabled>Anterior</button>
+                    <button class="nav-btn" id="next-btn" disabled>Próxima</button>
+                </div>
+            </div>
+            
+            <div class="result-container" id="result-section">
+                <h2 class="result-title">Identificação Concluída!</h2>
+                <p>O lagarto que você observou é provavelmente:</p>
+                <div class="species-name" id="species-name">Nome da Espécie</div>
+                
+                <img src="https://placehold.co/400x300/1b4332/white?text=Imagem+do+Lagarto" alt="Imagem do lagarto" class="species-image" id="species-image">
+                
+                <div class="species-info">
+                    <p><strong>Características principais:</strong> <span id="species-traits"></span></p>
+                    <p><strong>Habitat:</strong> <span id="species-habitat"></span></p>
+                    <p><strong>Distribuição:</strong> <span id="species-distribution"></span></p>
+                    <p><strong>Curiosidade:</strong> <span id="species-fact"></span></p>
+                </div>
+                
+                <button class="reset-btn" id="reset-btn">Nova Identificação</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Baseado na obra "Lizards of Brazilian Amazonia" de T.C.S. Avila-Pires</p>
+        <p>© 2023 - Identificador de Lagartos da Amazônia Brasileira</p>
+    </footer>
+
+    <script>
+        // Current state
+        let currentQuestionId = 1;
+        let answers = [];
+        let questionHistory = [1];
+        
+        // Question data - estrutura completa da chave de identificação
+        const questions = [
+            {
+                id: 1,
+                text: "Como são as escamas no topo da cabeça do lagarto?",
+                options: [
+                    { 
+                        text: "Pequenas e granulares (como areia)", 
+                        value: "a", 
+                        next: 2,
+                        description: "Topo da cabeça com escamas pequenas e granulares, sem escamas grandes evidentes."
+                    },
+                    { 
+                        text: "Com algumas escamas grandes, não granulares", 
+                        value: "b", 
+                        next: 16,
+                        description: "Presença de escamas grandes e distintas no topo da cabeça."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Escamas+na+cabeça"
+            },
+            {
+                id: 2,
+                text: "A pupila do olho é vertical com margens lobadas?",
+                options: [
+                    { 
+                        text: "Sim, pupila vertical", 
+                        value: "a", 
+                        next: 3,
+                        description: "Pupila em fenda vertical, típica de espécies noturnas."
+                    },
+                    { 
+                        text: "Não, pupila redonda", 
+                        value: "b", 
+                        next: 5,
+                        description: "Pupila circular, comum em espécies diurnas."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Formatos+de+pupila"
+            },
+            {
+                id: 3,
+                text: "Os dedos são fortemente dilatados?",
+                options: [
+                    { 
+                        text: "Sim, dedos dilatados", 
+                        value: "a", 
+                        next: 4,
+                        description: "Dedos alargados, adaptados para escalar superfícies."
+                    },
+                    { 
+                        text: "Não, dedos não dilatados", 
+                        value: "b", 
+                        next: 5,
+                        description: "Dedos estreitos, não adaptados para aderência em superfícies."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Formatos+de+dedos"
+            },
+            {
+                id: 4,
+                text: "Os dedos são conectados por membranas?",
+                options: [
+                    { 
+                        text: "Sim, com membranas", 
+                        value: "a", 
+                        result: "Thecadactylus rapicauda",
+                        description: "Presença de membranas interdigitais."
+                    },
+                    { 
+                        text: "Não, sem membranas", 
+                        value: "b", 
+                        next: 5,
+                        description: "Dedos sem membranas interdigitais."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Membranas+entre+dedos"
+            },
+            {
+                id: 5,
+                text: "Os machos possuem escamas escutiformes na barriga?",
+                options: [
+                    { 
+                        text: "Sim", 
+                        value: "a", 
+                        next: 6,
+                        description: "Escamas especializadas na região ventral dos machos."
+                    },
+                    { 
+                        text: "Não", 
+                        value: "b", 
+                        next: 10,
+                        description: "Ausência de escamas especializadas na região ventral."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Escamas+ventrais"
+            },
+            {
+                id: 6,
+                text: "As escamas sob a cauda são aumentadas?",
+                options: [
+                    { 
+                        text: "Sim, escamas aumentadas", 
+                        value: "a", 
+                        next: 7,
+                        description: "Escamas subcaudais maiores que as dorsais."
+                    },
+                    { 
+                        text: "Não, do mesmo tamanho", 
+                        value: "b", 
+                        next: 8,
+                        description: "Escamas subcaudais sem diferença de tamanho em relação às dorsais."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Escamas+subcaudais"
+            },
+            {
+                id: 7,
+                text: "A placa supraciliar tem um espinho alongado?",
+                options: [
+                    { 
+                        text: "Sim", 
+                        value: "a", 
+                        next: 8,
+                        description: "Espinho evidente na placa supraciliar."
+                    },
+                    { 
+                        text: "Não", 
+                        value: "b", 
+                        next: 9,
+                        description: "Ausência de espinho na placa supraciliar."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Placa+supraciliar"
+            },
+            {
+                id: 8,
+                text: "As laminelas subdigitais são mais estreitas que o dedo?",
+                options: [
+                    { 
+                        text: "Sim", 
+                        value: "a", 
+                        result: "Gonatodes annularis",
+                        description: "Laminelas subdigitais estreitas."
+                    },
+                    { 
+                        text: "Não", 
+                        value: "b", 
+                        result: "Gonatodes eladioi",
+                        description: "Laminelas subdigitais largas."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Laminelas+subdigitais"
+            },
+            {
+                id: 10,
+                text: "A bainha ungueal é comprimida?",
+                options: [
+                    { 
+                        text: "Sim", 
+                        value: "a", 
+                        next: 11,
+                        description: "Bainha ungueal comprimida."
+                    },
+                    { 
+                        text: "Não", 
+                        value: "b", 
+                        next: 12,
+                        description: "Bainha ungueal não comprimida."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Bainha+ungueal"
+            },
+            {
+                id: 16,
+                text: "Há uma prega gular grande e pendular (como um 'chapo')?",
+                options: [
+                    { 
+                        text: "Sim, com prega gular grande", 
+                        value: "a", 
+                        result: "Iguana iguana",
+                        description: "Pregas gulares bem desenvolvidas e evidentes."
+                    },
+                    { 
+                        text: "Não, sem prega gular grande", 
+                        value: "b", 
+                        next: 17,
+                        description: "Ausência de pregas gulares desenvolvidas."
+                    }
+                ],
+                image: "https://placehold.co/600x400/2a6b3c/white?text=Pregas+gulares"
+            }
+        ];
+        
+        // Species data
+        const speciesData = {
+            "Thecadactylus rapicauda": {
+                name: "Thecadactylus rapicauda",
+                traits: "Gecko noturno com dedos dilatados e membranas interdigitais.",
+                habitat: "Florestas tropicais, frequentemente em árvores.",
+                distribution: "Amazônia Brasileira e norte da América do Sul.",
+                fact: "É capaz de regenerar sua cauda se for predado.",
+                image: "https://placehold.co/400x300/1b4332/white?text=Thecadactylus+rapicauda"
+            },
+            "Iguana iguana": {
+                name: "Iguana iguana",
+                traits: "Lagarto grande com prega gular proeminente e crista dorsal.",
+                habitat: "Florestas tropicais, áreas alagadas e vegetação ribeirinha.",
+                distribution: "América do Sul e Central.",
+                fact: "Podem cair de alturas de até 15 metros sem se machucar gravemente.",
+                image: "https://placehold.co/400x300/1b4332/white?text=Iguana+iguana"
+            },
+            "Gonatodes annularis": {
+                name: "Gonatodes annularis",
+                traits: "Lagarto pequeno com anéis claros no corpo.",
+                habitat: "Florestas tropicais e vegetação secundária.",
+                distribution: "Bacia Amazônica.",
+                fact: "Muda de cor dependendo do ambiente e temperatura.",
+                image: "https://placehold.co/400x300/1b4332/white?text=Gonatodes+annularis"
+            },
+            "Gonatodes eladioi": {
+                name: "Gonatodes eladioi",
+                traits: "Lagarto pequeno com faixa vertebral clara.",
+                habitat: "Florestas úmidas e áreas de vegetação densa.",
+                distribution: "Amazônia Ocidental.",
+                fact: "Descoberto recentemente, em 1987.",
+                image: "https://placehold.co/400x300/1b4332/white?text=Gonatodes+eladioi"
+            }
+        };
+        
+        // DOM elements
+        const questionNumber = document.getElementById('question-number');
+        const questionText = document.getElementById('question-text');
+        const questionImage = document.getElementById('question-image');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const questionSection = document.getElementById('question-section');
+        const resultSection = document.getElementById('result-section');
+        const speciesName = document.getElementById('species-name');
+        const speciesTraits = document.getElementById('species-traits');
+        const speciesHabitat = document.getElementById('species-habitat');
+        const speciesDistribution = document.getElementById('species-distribution');
+        const speciesFact = document.getElementById('species-fact');
+        const speciesImage = document.getElementById('species-image');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Initialize the app
+        function init() {
+            showQuestion(1);
+            updateProgressBar();
+            
+            // Event listeners
+            resetBtn.addEventListener('click', resetIdentification);
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+        }
+        
+        // Show question based on ID
+        function showQuestion(questionId) {
+            const question = questions.find(q => q.id === questionId);
+            if (!question) {
+                console.error("Pergunta não encontrada:", questionId);
+                return;
+            }
+            
+            currentQuestionId = questionId;
+            const questionIndex = questions.findIndex(q => q.id === questionId);
+            questionNumber.textContent = `Pergunta ${questionIndex + 1} de ${questions.length}`;
+            questionText.textContent = question.text;
+            questionImage.src = question.image;
+            questionImage.alt = question.text;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            // Add new options
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option.text;
+                button.dataset.value = option.value;
+                button.addEventListener('click', () => selectOption(option));
+                optionsContainer.appendChild(button);
+            });
+            
+            // Check if we already have an answer for this question
+            const existingAnswer = answers.find(a => a.questionId === questionId);
+            if (existingAnswer) {
+                const selectedButton = optionsContainer.querySelector(`.option-btn[data-value="${existingAnswer.value}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.disabled = true;
+            }
+            
+            // Update navigation buttons
+            prevBtn.disabled = questionHistory.length <= 1;
+            
+            updateProgressBar();
+        }
+        
+        // Handle option selection
+        function selectOption(option) {
+            // Remove selected class from all options
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            event.target.classList.add('selected');
+            
+            // Store the answer
+            answers = answers.filter(a => a.questionId !== currentQuestionId);
+            answers.push({
+                questionId: currentQuestionId,
+                value: option.value,
+                next: option.next,
+                result: option.result
+            });
+            
+            // Enable next button
+            nextBtn.disabled = false;
+        }
+        
+        // Show result
+        function showResult(species) {
+            questionSection.style.display = 'none';
+            resultSection.style.display = 'block';
+            
+            const data = speciesData[species] || {
+                name: species,
+                traits: "Informações detalhadas não disponíveis.",
+                habitat: "Habitat não especificado.",
+                distribution: "Distribuição não especificada.",
+                fact: "Curiosidade não disponível.",
+                image: "https://placehold.co/400x300/1b4332/white?text=Imagem+Não+Disponível"
+            };
+            
+            speciesName.textContent = data.name;
+            speciesTraits.textContent = data.traits;
+            speciesHabitat.textContent = data.habitat;
+            speciesDistribution.textContent = data.distribution;
+            speciesFact.textContent = data.fact;
+            speciesImage.src = data.image;
+            speciesImage.alt = data.name;
+            
+            progressBar.style.width = '100%';
+        }
+        
+        // Update progress bar
+        function updateProgressBar() {
+            const questionIndex = questions.findIndex(q => q.id === currentQuestionId);
+            const progress = ((questionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Go to next question
+        function goToNextQuestion() {
+            const currentAnswer = answers.find(a => a.questionId === currentQuestionId);
+            if (!currentAnswer) return;
+            
+            if (currentAnswer.result) {
+                // If we have a result, show it
+                showResult(currentAnswer.result);
+            } else if (currentAnswer.next) {
+                // If we have a next question, go to it
+                questionHistory.push(currentAnswer.next);
+                showQuestion(currentAnswer.next);
+            } else {
+                console.error("Próxima etapa não definida para a resposta:", currentAnswer);
+            }
+        }
+        
+        // Go to previous question
+        function goToPreviousQuestion() {
+            if (questionHistory.length <= 1) return;
+            
+            // Remove current question from history
+            questionHistory.pop();
+            
+            // Get the previous question
+            const prevQuestionId = questionHistory[questionHistory.length - 1];
+            
+            // Remove answer for current question
+            answers = answers.filter(a => a.questionId !== currentQuestionId);
+            
+            showQuestion(prevQuestionId);
+        }
+        
+        // Reset identification
+        function resetIdentification() {
+            currentQuestionId = 1;
+            answers = [];
+            questionHistory = [1];
+            
+            resultSection.style.display = 'none';
+            questionSection.style.display = 'block';
+            
+            showQuestion(1);
+            updateProgressBar();
+        }
+        
+        // Initialize the app when the page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
